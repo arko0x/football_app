@@ -9,6 +9,7 @@ headers = {
     'x-rapidapi-host': 'v3.football.api-sports.io'
 }
 
+
 def get_leagues_for_country(country_name):
     url = "https://v3.football.api-sports.io/leagues?country=" + country_name
     league_names = []
@@ -20,4 +21,14 @@ def get_leagues_for_country(country_name):
             league_names.append(league['league']['name'])
     return league_names
 
-print(get_leagues_for_country("england"))
+
+def get_seasons():
+    url = "https://v3.football.api-sports.io/leagues/seasons"
+    seasons = []
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+    data = json.loads(response.text)['response']
+    for season in data:
+        seasons.append(season)
+
+    return seasons

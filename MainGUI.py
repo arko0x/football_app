@@ -13,6 +13,8 @@ class MainGUI:
         self.spain_button = None
         self.league_combobox_label = None
         self.league_combobox = None
+        self.season_combobox_label = None
+        self.season_combobox = None
         self.init_gui()
 
     def init_gui(self):
@@ -34,6 +36,10 @@ class MainGUI:
         self.league_combobox_label.grid(row=0, column=1)
         self.league_combobox = Combobox(root, value=far.get_leagues_for_country("england"), state="readonly")
         self.league_combobox.grid(row=0, column=2)
+        self.season_combobox_label = Label(self.root, text="Season: ")
+        self.season_combobox_label.grid(row=0, column=3)
+        self.season_combobox = Combobox(root, value=far.get_seasons())
+        self.season_combobox.grid(row=0, column=4)
         self.create_league_table()
 
     def define_league_table(self, country_name):
@@ -71,6 +77,7 @@ class MainGUI:
 if __name__ == '__main__':
     root = Tk()
     root.title("Football app")
+    root.geometry("1000x700")
     root.resizable(False, False)
     MainGUI(root)
     root.mainloop()
