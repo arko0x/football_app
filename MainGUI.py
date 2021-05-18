@@ -15,6 +15,10 @@ class MainGUI:
         self.league_combobox = None
         self.season_combobox_label = None
         self.season_combobox = None
+        self.current_standings = []
+        self.search_league_and_season_standings_button = Button(self.root, text="Search", height=1, width=10, command=lambda: self.update_standings_for_league_and_season(far.get_league_id(self.league_combobox.get()), self.season_combobox.get()))
+        self.search_league_and_season_standings_button.grid(row=0, column=5)
+        self.current_top_scorers = []
         self.init_gui()
 
     def init_gui(self):
@@ -48,17 +52,6 @@ class MainGUI:
         self.league_combobox.grid(row=0, column=2)
 
     def create_league_table(self):
-        sample_data = [(1, "Manchester United", 60, 20, 20, 0, 0, 54, 22, 32),
-                       (2, "Manchester United", 60, 20, 20, 0, 0, 54, 22, 32),
-                       (3, "Manchester United", 60, 20, 20, 0, 0, 54, 22, 32),
-                       (4, "Manchester United", 60, 20, 20, 0, 0, 54, 22, 32),
-                       (5, "Manchester United", 60, 20, 20, 0, 0, 54, 22, 32),
-                       (6, "Manchester United", 60, 20, 20, 0, 0, 54, 22, 32),
-                       (7, "Manchester United", 60, 20, 20, 0, 0, 54, 22, 32),
-                       (8, "Manchester United", 60, 20, 20, 0, 0, 54, 22, 32),
-                       (9, "Manchester United", 60, 20, 20, 0, 0, 54, 22, 32),
-                       (10, "Manchester United", 60, 20, 20, 0, 0, 54, 22, 32)]
-
         Label(self.root, font=("Verdana", 13, "bold"), text="Pos.").grid(row=1, column=1)
         Label(self.root, font=("Verdana", 13, "bold"), text="Team").grid(row=1, column=2)
         Label(self.root, font=("Verdana", 13, "bold"), text="Pts").grid(row=1, column=3)
@@ -69,15 +62,56 @@ class MainGUI:
         Label(self.root, font=("Verdana", 13, "bold"), text="Gs.").grid(row=1, column=8)
         Label(self.root, font=("Verdana", 13, "bold"), text="Gc.").grid(row=1, column=9)
         Label(self.root, font=("Verdana", 13, "bold"), text="Gd.").grid(row=1, column=10)
-        for i in range(10):
-            for j in range(10):
-                Label(self.root, font=("Arial", 13), text=sample_data[i][j]).grid(row=i+2, column=j+1)
+        Label(self.root, font=("Verdana", 13, "bold"), text="Player").grid(row=1, column=12)
+        Label(self.root, font=("Verdana", 13, "bold"), text="Team").grid(row=1, column=13)
+        Label(self.root, font=("Verdana", 13, "bold"), text="Goals").grid(row=1, column=14)
 
+        for item in self.current_standings:
+            item.grid_forget()
+        self.current_standings = []
+
+        standings = far.get_standings_for_league_and_season("39", "2020")
+        for i in range(len(standings)):
+            for j in range(len(standings[i])):
+                label_to_add = Label(self.root, font=("Arial", 13), text=standings[i][j])
+                label_to_add.grid(row=i+2, column=j+1)
+                self.current_standings.append(label_to_add)
+
+        self.create_top_scorers_table("39", "2020")
+
+
+
+    def update_standings_for_league_and_season(self, league, season):
+        standings = far.get_standings_for_league_and_season(league, season)
+        for item in self.current_standings:
+            item.grid_forget()
+        self.current_standings = []
+
+        for i in range(len(standings)):
+            for j in range(len(standings[i])):
+                label_to_add = Label(self.root, font=("Arial", 13), text=standings[i][j])
+                label_to_add.grid(row=i+2, column=j+1)
+                self.current_standings.append(label_to_add)
+
+        self.create_top_scorers_table(league, season)
+
+    def create_top_scorers_table(self, league, season):
+        for item in self.current_top_scorers:
+            item.grid_forget()
+        self.current_top_scorers = []
+
+        top_scorers = far.get_scorers_for_league_and_season(league, season)
+        for i in range(len(top_scorers)):
+            for j in range(len(top_scorers[i])):
+                label_to_add = Label(self.root, font=("Arial", 13), text=top_scorers[i][j])
+                label_to_add.grid(row=i+2, column=j+12)
+                self.current_top_scorers.append(label_to_add)
+        far.get_scorers_for_league_and_season(league, season)
 
 if __name__ == '__main__':
     root = Tk()
     root.title("Football app")
-    root.geometry("1000x700")
+    root.geometry("1300x700")
     root.resizable(False, False)
     MainGUI(root)
     root.mainloop()
