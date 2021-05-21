@@ -17,10 +17,12 @@ class MainGUI:
             scrollregion=self.countries_canvas.bbox("all")))
         self.countries_inner_frame = Frame(self.countries_canvas, bg="red")
         self.countries_canvas.create_window((0, 0), window=self.countries_inner_frame, anchor="nw")
-
+        self.countries_buttons = []
         for i in range(len(countries)):
-            Button(self.countries_inner_frame, text=countries[i], height=1, width=10, bg="#00203F", fg="#ADEFD1",
-                   command=lambda: self.define_league_table(countries[i])).grid(
+            self.countries_buttons.append(
+                Button(self.countries_inner_frame, text=countries[i], height=1, width=10, bg="#00203F", fg="#ADEFD1",
+                       command=lambda i=i: self.define_league_table(countries[i])))
+            self.countries_buttons[i].grid(
                 row=i, column=0, sticky="nsew")
 
     def __initialize_leagues_and_seasons_frame(self):
@@ -138,9 +140,9 @@ class MainGUI:
 
         for i in range(len(standings)):
             for j in range(len(standings[i])):
-                label_to_add = Entry(self.countries_frame, font=("Arial", 13), bg="#00203F", fg="#ADEFD1",
+                label_to_add = Label(self.league_table_frame, font=("Arial", 13), bg="#00203F", fg="#ADEFD1",
                                      text=standings[i][j])
-                label_to_add.grid(row=i + 2, column=j + 1)
+                label_to_add.grid(row=i + 3, column=j + 1)
                 self.current_standings.append(label_to_add)
 
         self.create_top_scorers_table(league, season)
@@ -153,9 +155,9 @@ class MainGUI:
         top_scorers = far.get_scorers_for_league_and_season(league, season)
         for i in range(len(top_scorers)):
             for j in range(len(top_scorers[i])):
-                label_to_add = Label(self.main_frame, font=("Arial", 13), bg="#ADEFD1", fg="#00203F",
+                label_to_add = Label(self.league_table_frame, font=("Arial", 13), bg="#ADEFD1", fg="#00203F",
                                      text=top_scorers[i][j])
-                label_to_add.grid(row=i + 2, column=j + 12)
+                label_to_add.grid(row=i + 3, column=j + 12)
                 self.current_top_scorers.append(label_to_add)
         far.get_scorers_for_league_and_season(league, season)
 
