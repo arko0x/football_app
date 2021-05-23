@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 from tkinter.ttk import Combobox
 import football_api_requests as far
 
@@ -111,8 +112,10 @@ class MainGUI:
 
     def update_standings_for_league_and_season(self, league, season):
         standings = far.get_standings_for_league_and_season(league, season)
-        self.__update_standings(standings)
-        self.create_top_scorers_table(league, season)
+        if not standings: messagebox.showerror("No data found", "No data found for given league and season.")
+        else:
+            self.__update_standings(standings)
+            self.create_top_scorers_table(league, season)
 
     def __update_standings(self, standings):
         for item in self.current_standings:

@@ -42,7 +42,10 @@ def get_leagues_for_country(country_name):
 
 
 def get_league_id(league_name):
-    return leagues_ids_dictionary[league_name]
+    if league_name in leagues_ids_dictionary.keys():
+        return leagues_ids_dictionary[league_name]
+    else:
+        return []
 
 
 def get_seasons():
