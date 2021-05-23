@@ -5,6 +5,23 @@ import football_api_requests as far
 
 
 class MainGUI:
+    STANDINGS_INFO_LENGTH = 10
+    HEADING_SIZE = 15
+    STANDINGS_ELEM_SIZE = 13
+
+    def __init__(self, root):
+        self.current_standings = []
+        self.current_top_scorers = []
+
+        self.root = root
+        self.main_frame = Frame(self.root, bg="#ADEFD1")
+        self.main_frame.pack(fill=BOTH, expand=1)
+        self.right_frame = Frame(self.main_frame, bg="#ADEFD1")
+        self.right_frame.grid(row=0, column=1, sticky="n")
+        self.__initialize_countries_scrollbar_with_buttons(far.get_all_countries())
+        self.__initialize_leagues_and_seasons_frame()
+        self.__initialize_league_table_frame()
+
     def __initialize_countries_scrollbar_with_buttons(self, countries):
         self.countries_frame = Frame(self.main_frame)
         self.countries_frame.grid(row=0, column=0)
@@ -21,7 +38,7 @@ class MainGUI:
         for i in range(len(countries)):
             self.countries_buttons.append(
                 Button(self.countries_inner_frame, text=countries[i], height=1, width=10, bg="#00203F", fg="#ADEFD1",
-                       command=lambda i=i: self.define_league_table(countries[i])))
+                       command=lambda j=i: self.define_league_table(countries[j])))
             self.countries_buttons[i].grid(
                 row=i, column=0, sticky="nsew")
 
@@ -40,7 +57,8 @@ class MainGUI:
         self.search_league_and_season_standings_button = Button(self.leagues_seasons_frame, text="Search", height=1,
                                                                 width=10,
                                                                 bg="#00203F", fg="#ADEFD1",
-                                                                command=lambda: self.update_standings_for_league_and_season(
+                                                                command=lambda:
+                                                                self.update_standings_for_league_and_season(
                                                                     far.get_league_id(self.league_combobox.get()),
                                                                     self.season_combobox.get()))
         self.search_league_and_season_standings_button.grid(row=0, column=5)
@@ -50,19 +68,6 @@ class MainGUI:
         self.league_table_frame.grid(row=1, column=1, sticky="n")
         self.create_league_table()
 
-    def __init__(self, root):
-        self.current_standings = []
-        self.current_top_scorers = []
-
-        self.root = root
-        self.main_frame = Frame(self.root, bg="#ADEFD1")
-        self.main_frame.pack(fill=BOTH, expand=1)
-        self.right_frame = Frame(self.main_frame, bg="#ADEFD1")
-        self.right_frame.grid(row=0, column=1, sticky="n")
-        self.__initialize_countries_scrollbar_with_buttons(far.get_all_countries())
-        self.__initialize_leagues_and_seasons_frame()
-        self.__initialize_league_table_frame()
-
     def define_league_table(self, country_name):
         self.league_combobox.grid_forget()
         self.league_combobox = Combobox(self.leagues_seasons_frame, value=far.get_leagues_for_country(country_name),
@@ -70,35 +75,49 @@ class MainGUI:
         self.league_combobox.grid(row=0, column=2)
 
     def create_league_table(self):
-        Label(self.league_table_frame, text="League table", font=("Verdana", 15, "bold"), bg="#00203F",
+        Label(self.league_table_frame, text="League table", font=("Verdana", MainGUI.HEADING_SIZE, "bold"),
+              bg="#00203F",
               fg="#ADEFD1").grid(row=2, column=1, columnspan=10)
-        Label(self.league_table_frame, text="Top scorers", font=("Verdana", 15, "bold"), bg="#00203F",
+        Label(self.league_table_frame, text="Top scorers", font=("Verdana", MainGUI.HEADING_SIZE, "bold"), bg="#00203F",
               fg="#ADEFD1").grid(row=2, column=11, columnspan=3)
-        Button(self.league_table_frame, font=("Verdana", 11, "bold"), height=1, width=5, bg="#00203F", fg="#ADEFD1",
+        Button(self.league_table_frame, font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
+               bg="#00203F", fg="#ADEFD1",
                text="Pos.", command=lambda: self.sort_league_table(0)).grid(row=3, column=1, sticky="nsew")
-        Button(self.league_table_frame, font=("Verdana", 11, "bold"), height=1, width=5, bg="#00203F", fg="#ADEFD1",
+        Button(self.league_table_frame, font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
+               bg="#00203F", fg="#ADEFD1",
                text="Team", command=lambda: self.sort_league_table(1)).grid(row=3, column=2)
-        Button(self.league_table_frame, font=("Verdana", 11, "bold"), height=1, width=5, bg="#00203F", fg="#ADEFD1",
+        Button(self.league_table_frame, font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
+               bg="#00203F", fg="#ADEFD1",
                text="Pts", command=lambda: self.sort_league_table(2)).grid(row=3, column=3)
-        Button(self.league_table_frame, font=("Verdana", 11, "bold"), height=1, width=5, bg="#00203F", fg="#ADEFD1",
+        Button(self.league_table_frame, font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
+               bg="#00203F", fg="#ADEFD1",
                text="Games", command=lambda: self.sort_league_table(3)).grid(row=3, column=4)
-        Button(self.league_table_frame, font=("Verdana", 11, "bold"), height=1, width=5, bg="#00203F", fg="#ADEFD1",
+        Button(self.league_table_frame, font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
+               bg="#00203F", fg="#ADEFD1",
                text="W", command=lambda: self.sort_league_table(4)).grid(row=3, column=5)
-        Button(self.league_table_frame, font=("Verdana", 11, "bold"), height=1, width=5, bg="#00203F", fg="#ADEFD1",
+        Button(self.league_table_frame, font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
+               bg="#00203F", fg="#ADEFD1",
                text="D", command=lambda: self.sort_league_table(5)).grid(row=3, column=6)
-        Button(self.league_table_frame, font=("Verdana", 11, "bold"), height=1, width=5, bg="#00203F", fg="#ADEFD1",
+        Button(self.league_table_frame, font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
+               bg="#00203F", fg="#ADEFD1",
                text="L", command=lambda: self.sort_league_table(6)).grid(row=3, column=7)
-        Button(self.league_table_frame, font=("Verdana", 11, "bold"), height=1, width=5, bg="#00203F", fg="#ADEFD1",
+        Button(self.league_table_frame, font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
+               bg="#00203F", fg="#ADEFD1",
                text="Gs.", command=lambda: self.sort_league_table(7)).grid(row=3, column=8)
-        Button(self.league_table_frame, font=("Verdana", 11, "bold"), height=1, width=5, bg="#00203F", fg="#ADEFD1",
+        Button(self.league_table_frame, font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
+               bg="#00203F", fg="#ADEFD1",
                text="Gc.", command=lambda: self.sort_league_table(8)).grid(row=3, column=9)
-        Button(self.league_table_frame, font=("Verdana", 11, "bold"), height=1, width=5, bg="#00203F", fg="#ADEFD1",
+        Button(self.league_table_frame, font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
+               bg="#00203F", fg="#ADEFD1",
                text="Gd.", command=lambda: self.sort_league_table(9)).grid(row=3, column=10)
-        Button(self.league_table_frame, font=("Verdana", 11, "bold"), height=1, width=5, bg="#00203F", fg="#ADEFD1",
+        Button(self.league_table_frame, font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
+               bg="#00203F", fg="#ADEFD1",
                text="Player").grid(row=3, column=12)
-        Button(self.league_table_frame, font=("Verdana", 11, "bold"), height=1, width=5, bg="#00203F", fg="#ADEFD1",
+        Button(self.league_table_frame, font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
+               bg="#00203F", fg="#ADEFD1",
                text="Team").grid(row=3, column=13)
-        Button(self.league_table_frame, font=("Verdana", 11, "bold"), height=1, width=5, bg="#00203F", fg="#ADEFD1",
+        Button(self.league_table_frame, font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
+               bg="#00203F", fg="#ADEFD1",
                text="Goals").grid(row=3, column=14)
 
         standings = far.get_standings_for_league_and_season("39", "2020")
@@ -115,16 +134,8 @@ class MainGUI:
             self.create_top_scorers_table(league, season)
 
     def __update_standings(self, standings):
-        for item in self.current_standings:
-            item.grid_forget()
-        self.current_standings = []
-
-        for i in range(len(standings)):
-            for j in range(len(standings[i])):
-                label_to_add = Label(self.league_table_frame, font=("Arial", 13), bg="#00203F", fg="#ADEFD1",
-                                     text=standings[i][j])
-                label_to_add.grid(row=i + 4, column=j + 1)
-                self.current_standings.append(label_to_add)
+        self.__forget_standings()
+        self.__show_new_standings(standings)
 
     def create_top_scorers_table(self, league, season):
         for item in self.current_top_scorers:
@@ -134,7 +145,8 @@ class MainGUI:
         top_scorers = far.get_scorers_for_league_and_season(league, season)
         for i in range(len(top_scorers)):
             for j in range(len(top_scorers[i])):
-                label_to_add = Label(self.league_table_frame, font=("Arial", 13), bg="#00203F", fg="#D6ED17",
+                label_to_add = Label(self.league_table_frame, font=("Arial", MainGUI.STANDINGS_ELEM_SIZE),
+                                     bg="#00203F", fg="#D6ED17",
                                      text=top_scorers[i][j])
                 label_to_add.grid(row=i + 4, column=j + 12)
                 self.current_top_scorers.append(label_to_add)
@@ -143,7 +155,7 @@ class MainGUI:
         _list = []
         list_to_add = []
         for i in range(len(self.current_standings)):
-            if i % 10 != 0 or i == 0:
+            if i % MainGUI.STANDINGS_INFO_LENGTH != 0 or i == 0:
                 list_to_add.append(self.current_standings[i]["text"])
                 if i == len(self.current_standings) - 1:
                     _list.append(list_to_add)
@@ -156,14 +168,21 @@ class MainGUI:
         else:
             _list.sort(key=lambda e: e[index])
 
+        self.__forget_standings()
+        self.__show_new_standings(_list)
+
+    def __forget_standings(self):
         for item in self.current_standings:
             item.grid_forget()
 
         self.current_standings = []
-        for i in range(len(_list)):
-            for j in range(len(_list[i])):
-                label_to_add = Label(self.league_table_frame, font=("Arial", 13), bg="#00203F", fg="#ADEFD1",
-                                     text=_list[i][j])
+
+    def __show_new_standings(self, standings):
+        for i in range(len(standings)):
+            for j in range(len(standings[i])):
+                label_to_add = Label(self.league_table_frame, font=("Arial", MainGUI.STANDINGS_ELEM_SIZE), bg="#00203F",
+                                     fg="#ADEFD1",
+                                     text=standings[i][j])
                 label_to_add.grid(row=i + 4, column=j + 1)
                 self.current_standings.append(label_to_add)
 
