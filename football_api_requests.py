@@ -1,5 +1,6 @@
 import requests
 import json
+import random
 
 url = "https://v3.football.api-sports.io/leagues/seasons"
 
@@ -83,7 +84,7 @@ def get_standings_for_league_and_season(league, season):
              standing["all"]["goals"]["for"], standing["all"]["goals"]["against"], standing["goalsDiff"]))
 
     return standings_list
-    # list = [("1", "Real Madrid", "30", "40", "10", "20", "30", "100", "50", "50") for i in range(20)]
+    # list = [(""+str(i), "Real Madrid", str(random.randint(5, 20)), "40", "10", "20", "30", "100", "50", "50") for i in range(3)]
     # return list
 
 
