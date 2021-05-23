@@ -62,10 +62,6 @@ class MainGUI:
         self.__initialize_countries_scrollbar_with_buttons(far.get_all_countries())
         self.__initialize_leagues_and_seasons_frame()
         self.__initialize_league_table_frame()
-        self.england_button = None
-        self.germany_button = None
-        self.italy_button = None
-        self.spain_button = None
 
     def define_league_table(self, country_name):
         self.league_combobox.grid_forget()
