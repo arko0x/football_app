@@ -21,6 +21,7 @@ class MainGUI:
         self.__initialize_countries_scrollbar_with_buttons(far.get_all_countries())
         self.__initialize_leagues_and_seasons_frame()
         self.__initialize_league_table_frame()
+        self.__set_default_values_for_combobox_widgets()
 
     def __initialize_countries_scrollbar_with_buttons(self, countries):
         self.countries_frame = Frame(self.main_frame)
@@ -62,6 +63,13 @@ class MainGUI:
                                                                     far.get_league_id(self.league_combobox.get()),
                                                                     self.season_combobox.get()))
         self.search_league_and_season_standings_button.grid(row=0, column=5)
+
+    def __set_default_values_for_combobox_widgets(self):
+        self.league_combobox["values"] = far.get_leagues_for_country("England")
+        self.league_combobox.current(0)
+        self.season_combobox["values"] = far.get_seasons()
+        self.season_combobox.current(12)
+
 
     def __initialize_league_table_frame(self):
         self.league_table_frame = Frame(self.right_frame, bg="#00203F")
