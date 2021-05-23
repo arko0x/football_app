@@ -79,7 +79,7 @@ class MainGUI:
               bg="#00203F",
               fg="#ADEFD1").grid(row=2, column=1, columnspan=10)
         Label(self.league_table_frame, text="Top scorers", font=("Verdana", MainGUI.HEADING_SIZE, "bold"), bg="#00203F",
-              fg="#ADEFD1").grid(row=2, column=11, columnspan=3)
+              fg="#ADEFD1").grid(row=2, column=12, columnspan=3)
         Button(self.league_table_frame, font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
                bg="#00203F", fg="#ADEFD1",
                text="Pos.", command=lambda: self.sort_league_table(0)).grid(row=3, column=1, sticky="nsew")
