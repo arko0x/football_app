@@ -8,7 +8,7 @@ from TeamInfoGUI import *
 class MainGUI:
     STANDINGS_INFO_LENGTH = 10
     HEADING_SIZE = 15
-    STANDINGS_ELEM_SIZE = 13
+    STANDINGS_ELEM_SIZE = 11
     PLAYER_INFO_ELEM_SIZE = 10
 
     def __init__(self, root):
