@@ -2,12 +2,14 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter.ttk import Combobox
 import football_api_requests as far
+from TeamInfoGUI import *
 
 
 class MainGUI:
     STANDINGS_INFO_LENGTH = 10
     HEADING_SIZE = 15
     STANDINGS_ELEM_SIZE = 13
+    PLAYER_INFO_ELEM_SIZE = 10
 
     def __init__(self, root):
         self.current_standings = []
@@ -69,7 +71,6 @@ class MainGUI:
         self.league_combobox.current(0)
         self.season_combobox["values"] = far.get_seasons()
         self.season_combobox.current(12)
-
 
     def __initialize_league_table_frame(self):
         self.league_table_frame = Frame(self.right_frame, bg="#00203F")
@@ -193,6 +194,13 @@ class MainGUI:
                                      text=standings[i][j])
                 label_to_add.grid(row=i + 4, column=j + 1)
                 self.current_standings.append(label_to_add)
+                if j % 10 == 1:
+                    label_to_add.bind("<Button-1>", lambda x, team_name=self.current_standings[-1].cget("text"): self.__show_team_info_window(team_name, self.season_combobox.get()))
+                    label_to_add["cursor"] = "hand2"
+
+    def __show_team_info_window(self, team_name, season):
+        TeamInfoGUI(self.root, team_name, season)
+
 
 
 if __name__ == '__main__':
