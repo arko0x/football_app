@@ -14,6 +14,7 @@ class MainGUI:
     def __init__(self, root):
         self.current_standings = []
         self.current_top_scorers = []
+        self.teams_sort_info = [False for i in range(self.STANDINGS_INFO_LENGTH)]
 
         self.root = root
         self.main_frame = Frame(self.root, bg="#ADEFD1")
@@ -173,9 +174,13 @@ class MainGUI:
                 list_to_add = [self.current_standings[i]["text"]]
 
         if index != 1:
-            _list.sort(key=lambda e: int(e[index]))
+            _list.sort(key=lambda e: int(e[index]), reverse=self.teams_sort_info[index])
         else:
-            _list.sort(key=lambda e: e[index])
+            _list.sort(key=lambda e: e[index], reverse=self.teams_sort_info[index])
+
+        was_reversed = self.teams_sort_info[index]
+        self.teams_sort_info = [False for i in range(self.STANDINGS_INFO_LENGTH)]
+        self.teams_sort_info[index] = False if was_reversed else True
 
         self.__forget_standings()
         self.__show_new_standings(_list)
