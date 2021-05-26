@@ -127,7 +127,13 @@ def get_players_and_pages_for_team_and_season(team, season, page=None):
     pages = json.loads(response.text)["paging"]["total"]
 
     for elem in data:
-        players.append((elem["player"]["name"], elem["player"]["age"]))
+        players.append((elem["player"]["name"], elem["player"]["age"], elem["player"]["nationality"],
+                        elem["player"]["height"], elem["player"]["weight"],
+                        elem["statistics"][0]["games"]["appearences"],
+                        elem["statistics"][0]["goals"]["total"],
+                        elem["statistics"][0]["goals"]["assists"],
+                        elem["statistics"][0]["cards"]["yellow"],
+                        elem["statistics"][0]["cards"]["red"]))
 
     return players, int(pages)
 

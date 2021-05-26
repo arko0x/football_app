@@ -26,6 +26,22 @@ class TeamInfoGUI:
               bg="#00203F", fg="#ADEFD1").grid(row=0, column=0)
         Label(master=self.team_window, text="Age", font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"),
               bg="#00203F", fg="#ADEFD1").grid(row=0, column=1)
+        Label(master=self.team_window, text="Nationality", font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"),
+              bg="#00203F", fg="#ADEFD1").grid(row=0, column=2)
+        Label(master=self.team_window, text="Height", font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"),
+              bg="#00203F", fg="#ADEFD1").grid(row=0, column=3)
+        Label(master=self.team_window, text="Weight", font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"),
+              bg="#00203F", fg="#ADEFD1").grid(row=0, column=4)
+        Label(master=self.team_window, text="Games", font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"),
+              bg="#00203F", fg="#ADEFD1").grid(row=0, column=5)
+        Label(master=self.team_window, text="Goals", font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"),
+              bg="#00203F", fg="#ADEFD1").grid(row=0, column=6)
+        Label(master=self.team_window, text="Assists", font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"),
+              bg="#00203F", fg="#ADEFD1").grid(row=0, column=7)
+        Label(master=self.team_window, text="Yellow cards", font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"),
+              bg="#00203F", fg="#ADEFD1").grid(row=0, column=8)
+        Label(master=self.team_window, text="Red cards", font=("Verdana", MainGUI.STANDINGS_ELEM_SIZE, "bold"),
+              bg="#00203F", fg="#ADEFD1").grid(row=0, column=9)
 
         self.__show_players(players)
 
@@ -61,14 +77,11 @@ class TeamInfoGUI:
 
     def __show_players(self, players):
         for i in range(len(players)):
-            name = Label(master=self.team_window, text=players[i][0], font=("Arial", MainGUI.PLAYER_INFO_ELEM_SIZE), bg="#00203F",
-                  fg="#ADEFD1")
-            name.grid(row=i + 1, column=0)
-            age = Label(master=self.team_window, text=players[i][1], font=("Arial", MainGUI.PLAYER_INFO_ELEM_SIZE), bg="#00203F",
-                  fg="#ADEFD1")
-            age.grid(row=i + 1, column=1)
-            self.players_data.append(name)
-            self.players_data.append(age)
+            for j in range(len(players[i])):
+                label_to_add = Label(self.team_window, text=players[i][j], font=("Arial", MainGUI.PLAYER_INFO_ELEM_SIZE), bg="#00203F",
+                                     fg="#ADEFD1")
+                label_to_add.grid(row=i+1, column=j)
+                self.players_data.append(label_to_add)
 
 
 
