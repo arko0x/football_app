@@ -14,7 +14,8 @@ class MainGUI:
     def __init__(self, root):
         self.current_standings = []
         self.current_top_scorers = []
-        self.teams_sort_info = [False for i in range(self.STANDINGS_INFO_LENGTH)]
+        self.teams_sort_info = [False for _ in range(self.STANDINGS_INFO_LENGTH)]
+        self.current_season = "2020"
 
         self.root = root
         self.main_frame = Frame(self.root, bg="#ADEFD1")
@@ -140,6 +141,7 @@ class MainGUI:
         if not standings:
             messagebox.showerror("No data found", "No data found for given league and season.")
         else:
+            self.current_season = season
             self.__update_standings(standings)
             self.create_top_scorers_table(league, season)
 
@@ -179,7 +181,7 @@ class MainGUI:
             _list.sort(key=lambda e: e[index], reverse=self.teams_sort_info[index])
 
         was_reversed = self.teams_sort_info[index]
-        self.teams_sort_info = [False for i in range(self.STANDINGS_INFO_LENGTH)]
+        self.teams_sort_info = [False for _ in range(self.STANDINGS_INFO_LENGTH)]
         self.teams_sort_info[index] = False if was_reversed else True
 
         self.__forget_standings()
@@ -200,12 +202,12 @@ class MainGUI:
                 label_to_add.grid(row=i + 4, column=j + 1)
                 self.current_standings.append(label_to_add)
                 if j % 10 == 1:
-                    label_to_add.bind("<Button-1>", lambda x, team_name=self.current_standings[-1].cget("text"): self.__show_team_info_window(team_name, self.season_combobox.get()))
+                    label_to_add.bind("<Button-1>", lambda x, team_name=self.current_standings[-1].cget(
+                        "text"): self.__show_team_info_window(team_name))
                     label_to_add["cursor"] = "hand2"
 
-    def __show_team_info_window(self, team_name, season):
-        TeamInfoGUI(self.root, team_name, season)
-
+    def __show_team_info_window(self, team_name):
+        TeamInfoGUI(self.root, team_name, self.current_season)
 
 
 if __name__ == '__main__':
