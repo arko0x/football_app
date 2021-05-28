@@ -1,4 +1,5 @@
 import re
+import xlsxwriter
 
 
 def extract_integer_from_string_or_return_zero(_str):
@@ -7,3 +8,13 @@ def extract_integer_from_string_or_return_zero(_str):
         return 0
     else:
         return int(integers[0])
+
+def export_xlsx(filepath, data):
+    workbook = xlsxwriter.Workbook(filepath)
+    worksheet = workbook.add_worksheet()
+
+    for i in range(len(data)):
+        for j in range(len(data[i])):
+            worksheet.write(i, j, data[i][j])
+    workbook.close()
+

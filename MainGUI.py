@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 from tkinter.ttk import Combobox
+from tkinter import filedialog
 import football_api_requests as far
 from TeamInfoGUI import *
 
@@ -22,15 +23,25 @@ class MainGUI:
         self.main_frame.pack(fill=BOTH, expand=1)
         self.right_frame = Frame(self.main_frame, bg="#ADEFD1")
         self.right_frame.grid(row=0, column=1, sticky="n")
+        self.fixtures_frame = Frame(self.main_frame, bg="red")
+        self.fixtures_frame.grid(row=1, column=1, sticky="n")
+        self.__initialize_menu_bar()
         self.__initialize_countries_scrollbar_with_buttons(far.get_all_countries())
         self.__initialize_leagues_and_seasons_frame()
         self.__initialize_league_table_frame()
         self.__set_default_values_for_combobox_widgets()
 
+    def __initialize_menu_bar(self):
+        self.menu = Menu(self.root)
+        self.filemenu = Menu(self.menu, tearoff=0)
+        self.filemenu.add_command(label="Export league table as excel file", command=self.__export_xlsx)
+        self.menu.add_cascade(label="File", menu=self.filemenu)
+        root.config(menu=self.menu)
+
     def __initialize_countries_scrollbar_with_buttons(self, countries):
         self.countries_frame = Frame(self.main_frame)
         self.countries_frame.grid(row=0, column=0)
-        self.countries_canvas = Canvas(self.countries_frame, width=80, height=700)
+        self.countries_canvas = Canvas(self.countries_frame, width=80, height=565)
         self.countries_canvas.pack(side=LEFT, fill=BOTH, expand=1)
         self.countries_scrollbar = Scrollbar(self.countries_frame, orient=VERTICAL, command=self.countries_canvas.yview)
         self.countries_scrollbar.pack(side=RIGHT, fill=Y)
@@ -78,6 +89,11 @@ class MainGUI:
         self.league_table_frame = Frame(self.right_frame, bg="#00203F")
         self.league_table_frame.grid(row=1, column=1, sticky="n")
         self.create_league_table()
+
+    def __initialize_fixtures_frame(self):
+        Label(master=self.fixtures_frame, text="Next week fixtures for current season", bg="#ADEFD1", fg="#00203F",
+              font=("Verdana", 13, "bold"))\
+            .grid(row=0, column=0, sticky="n")
 
     def define_league_table(self, country_name):
         self.league_combobox.grid_forget()
@@ -208,6 +224,23 @@ class MainGUI:
 
     def __show_team_info_window(self, team_name):
         TeamInfoGUI(self.root, team_name, self.current_season)
+
+    def __export_xlsx(self):
+        filepath = filedialog.asksaveasfilename(filetypes=(
+                    ("Excel files", "*.xlsx"),
+                ))
+        data = []
+        list_to_add = []
+        for i in range(len(self.current_standings)):
+            if i % MainGUI.STANDINGS_INFO_LENGTH != 0 or i == 0:
+                list_to_add.append(self.current_standings[i]["text"])
+                if i == len(self.current_standings) - 1:
+                    data.append(list_to_add)
+            else:
+                data.append(list_to_add)
+                list_to_add = [self.current_standings[i]["text"]]
+        utils.export_xlsx(filepath, data)
+
 
 
 if __name__ == '__main__':
