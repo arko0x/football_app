@@ -16,11 +16,11 @@ class TeamInfoGUI:
         self.show_team_info_window(self.team_name, self.season)
         self.previous_page_button = Button(self.team_window, text="<<", bg="#ADEFD1", fg="#00203F",
                                            command=self.__previous_page)
-        self.previous_page_button.grid(row=21, column=0, sticky="e")
+        self.previous_page_button.grid(row=21, column=0, columnspan=5, sticky="e")
         self.previous_page_button["state"] = "disabled"
         self.next_page_button = Button(self.team_window, text=">>", bg="#ADEFD1", fg="#00203F",
                                        command=self.__next_page)
-        self.next_page_button.grid(row=21, column=1, sticky="w")
+        self.next_page_button.grid(row=21, column=5, columnspan=5, sticky="w")
 
         self.sort_info = [False for _ in range(self.NUMBER_OF_PLAYER_INFO_COLUMNS)]
 
