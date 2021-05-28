@@ -79,7 +79,7 @@ class MainGUI:
         self.season_combobox_label = Label(self.leagues_seasons_frame, text="Season: ", bg=MainGUI.APP_GREEN_COLOR,
                                            fg=MainGUI.APP_BLUE_COLOR)
         self.season_combobox_label.grid(row=0, column=3)
-        self.season_combobox = Combobox(self.leagues_seasons_frame, value=far.get_seasons())
+        self.season_combobox = Combobox(self.leagues_seasons_frame, value=far.get_seasons(), state="readonly")
         self.season_combobox.grid(row=0, column=4)
         self.search_league_and_season_standings_button = Button(self.leagues_seasons_frame, text="Search", height=1,
                                                                 width=10,
@@ -97,9 +97,11 @@ class MainGUI:
 
     def __set_default_values_for_combobox_widgets(self):
         self.league_combobox["values"] = far.get_leagues_for_country(MainGUI.DEFAULT_COUNTRY)
-        self.league_combobox.current(0)
+        if len(self.league_combobox["values"]) > 0:
+            self.league_combobox.current(0)
         self.season_combobox["values"] = far.get_seasons()
-        self.season_combobox.current(12)
+        if len(self.league_combobox["values"]) > 0:
+            self.season_combobox.current(12)
 
     def __update_league_combobox(self, country_name):
         self.league_combobox.grid_forget()
