@@ -72,10 +72,12 @@ class MainGUI:
         self.league_combobox_label = Label(self.leagues_seasons_frame, text="League: ", bg=MainGUI.APP_GREEN_COLOR,
                                            fg=MainGUI.APP_BLUE_COLOR)
         self.league_combobox_label.grid(row=0, column=1)
-        self.league_combobox = Combobox(self.leagues_seasons_frame, value=far.get_leagues_for_country(MainGUI.DEFAULT_COUNTRY),
+        self.league_combobox = Combobox(self.leagues_seasons_frame,
+                                        value=far.get_leagues_for_country(MainGUI.DEFAULT_COUNTRY),
                                         state="readonly")
         self.league_combobox.grid(row=0, column=2)
-        self.season_combobox_label = Label(self.leagues_seasons_frame, text="Season: ", bg=MainGUI.APP_GREEN_COLOR, fg=MainGUI.APP_BLUE_COLOR)
+        self.season_combobox_label = Label(self.leagues_seasons_frame, text="Season: ", bg=MainGUI.APP_GREEN_COLOR,
+                                           fg=MainGUI.APP_BLUE_COLOR)
         self.season_combobox_label.grid(row=0, column=3)
         self.season_combobox = Combobox(self.leagues_seasons_frame, value=far.get_seasons())
         self.season_combobox.grid(row=0, column=4)
@@ -83,7 +85,7 @@ class MainGUI:
                                                                 width=10,
                                                                 bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
                                                                 command=lambda:
-                                                                self.update_standings_for_league_and_season(
+                                                                self.__update_standings_for_league_and_season(
                                                                     far.get_league_id(self.league_combobox.get()),
                                                                     self.season_combobox.get()))
         self.search_league_and_season_standings_button.grid(row=0, column=5)
@@ -106,48 +108,50 @@ class MainGUI:
         self.league_combobox.grid(row=0, column=2)
 
     def __create_league_table(self):
-        Label(self.league_table_frame, text="League table", font=(MainGUI.DEFAULT_APP_FONT, MainGUI.HEADING_SIZE, "bold"),
+        Label(self.league_table_frame, text="League table",
+              font=(MainGUI.DEFAULT_APP_FONT, MainGUI.HEADING_SIZE, "bold"),
               bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR).grid(row=2, column=1, columnspan=10)
-        Label(self.league_table_frame, text="Top scorers", font=(MainGUI.DEFAULT_APP_FONT, MainGUI.HEADING_SIZE, "bold"),
+        Label(self.league_table_frame, text="Top scorers",
+              font=(MainGUI.DEFAULT_APP_FONT, MainGUI.HEADING_SIZE, "bold"),
               bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR).grid(row=2, column=12, columnspan=3)
-        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
-               bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
+        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1,
+               width=5, bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
                text="Pos.", command=lambda: self.__sort_league_table(0)).grid(row=3, column=1, sticky="nsew")
-        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
-               bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
+        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1,
+               width=5, bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
                text="Team", command=lambda: self.__sort_league_table(1)).grid(row=3, column=2)
-        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
-               bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
+        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1,
+               width=5, bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
                text="Pts", command=lambda: self.__sort_league_table(2)).grid(row=3, column=3)
-        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
-               bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
+        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1,
+               width=5, bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
                text="Games", command=lambda: self.__sort_league_table(3)).grid(row=3, column=4)
-        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
-               bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
+        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1,
+               width=5, bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
                text="W", command=lambda: self.__sort_league_table(4)).grid(row=3, column=5)
-        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
-               bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
+        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1,
+               width=5, bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
                text="D", command=lambda: self.__sort_league_table(5)).grid(row=3, column=6)
-        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
-               bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
+        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1,
+               width=5, bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
                text="L", command=lambda: self.__sort_league_table(6)).grid(row=3, column=7)
-        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
-               bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
+        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1,
+               width=5, bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
                text="Gs.", command=lambda: self.__sort_league_table(7)).grid(row=3, column=8)
-        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
-               bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
+        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1,
+               width=5, bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
                text="Gc.", command=lambda: self.__sort_league_table(8)).grid(row=3, column=9)
-        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
-               bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
+        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1,
+               width=5,bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
                text="Gd.", command=lambda: self.__sort_league_table(9)).grid(row=3, column=10)
-        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
-               bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
+        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1,
+               width=5, bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
                text="Player").grid(row=3, column=12)
-        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
-               bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
+        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1,
+               width=5, bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
                text="Team").grid(row=3, column=13)
-        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1, width=5,
-               bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
+        Button(self.league_table_frame, font=(MainGUI.DEFAULT_APP_FONT, MainGUI.STANDINGS_ELEM_SIZE, "bold"), height=1,
+               width=5, bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR,
                text="Goals").grid(row=3, column=14)
 
         standings = far.get_standings_for_league_and_season(MainGUI.DEFAULT_LEAGUE, MainGUI.DEFAULT_SEASON)
@@ -155,7 +159,7 @@ class MainGUI:
 
         self.__create_top_scorers_table(MainGUI.DEFAULT_LEAGUE, MainGUI.DEFAULT_SEASON)
 
-    def update_standings_for_league_and_season(self, league, season):
+    def __update_standings_for_league_and_season(self, league, season):
         standings = far.get_standings_for_league_and_season(league, season)
         if not standings:
             messagebox.showerror("No data found", "No data found for given league and season.")
@@ -206,9 +210,8 @@ class MainGUI:
     def __show_new_standings(self, standings):
         for i in range(len(standings)):
             for j in range(len(standings[i])):
-                label_to_add = Label(self.league_table_frame, font=("Arial", MainGUI.STANDINGS_ELEM_SIZE), bg=MainGUI.APP_BLUE_COLOR,
-                                     fg=MainGUI.APP_GREEN_COLOR,
-                                     text=standings[i][j])
+                label_to_add = Label(self.league_table_frame, font=("Arial", MainGUI.STANDINGS_ELEM_SIZE),
+                                     bg=MainGUI.APP_BLUE_COLOR, fg=MainGUI.APP_GREEN_COLOR, text=standings[i][j])
                 label_to_add.grid(row=i + 4, column=j + 1)
                 self.current_standings.append(label_to_add)
                 if j % 10 == 1:
