@@ -18,3 +18,13 @@ def export_xlsx(filepath, data):
             worksheet.write(i, j, data[i][j])
     workbook.close()
 
+def export_txt(filepath, data):
+    file = open(filepath, "w")
+
+    for i in range(len(data)):
+        for j in range(len(data[i])):
+            file.write(data[i][j] + "\t")
+        file.write("\n")
+
+    file.close()
+

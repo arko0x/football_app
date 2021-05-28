@@ -41,6 +41,7 @@ class MainGUI:
         self.menu = Menu(self.root)
         self.filemenu = Menu(self.menu, tearoff=0)
         self.filemenu.add_command(label="Export league table as excel file", command=self.__export_xlsx)
+        self.filemenu.add_command(label="Export league table as .txt file", command=self.__export_txt)
         self.menu.add_cascade(label="File", menu=self.filemenu)
         root.config(menu=self.menu)
 
@@ -224,6 +225,13 @@ class MainGUI:
         ))
         data = self.__get_standings_as_list_of_lists()
         utils.export_xlsx(filepath, data)
+
+    def __export_txt(self):
+        filepath = filedialog.asksaveasfilename(filetypes=(
+            ("txt files", "*.txt"),
+        ))
+        data = self.__get_standings_as_list_of_lists()
+        utils.export_txt(filepath, data)
 
     def __get_standings_as_list_of_lists(self):
         data = []
