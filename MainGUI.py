@@ -48,7 +48,7 @@ class MainGUI:
     def __initialize_countries_scrollbar_with_buttons(self, countries):
         self.countries_frame = Frame(self.main_frame)
         self.countries_frame.grid(row=0, column=0)
-        self.countries_canvas = Canvas(self.countries_frame, width=80, height=565)
+        self.countries_canvas = Canvas(self.countries_frame, width=110, height=565)
         self.countries_canvas.pack(side=LEFT, fill=BOTH, expand=1)
         self.countries_scrollbar = Scrollbar(self.countries_frame, orient=VERTICAL, command=self.countries_canvas.yview)
         self.countries_scrollbar.pack(side=RIGHT, fill=Y)
@@ -60,7 +60,7 @@ class MainGUI:
         self.countries_buttons = []
         for i in range(len(countries)):
             self.countries_buttons.append(
-                Button(self.countries_inner_frame, text=countries[i], height=1, width=10, bg=MainGUI.APP_BLUE_COLOR,
+                Button(self.countries_inner_frame, text=countries[i], height=1, width=15, bg=MainGUI.APP_BLUE_COLOR,
                        fg=MainGUI.APP_GREEN_COLOR,
                        command=lambda j=i: self.__update_league_combobox(countries[j])))
             self.countries_buttons[i].grid(
