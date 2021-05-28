@@ -1,5 +1,6 @@
 from MainGUI import *
 import utils
+from tkinter import filedialog
 
 
 class TeamInfoGUI:
@@ -23,6 +24,15 @@ class TeamInfoGUI:
         self.next_page_button.grid(row=21, column=5, columnspan=5, sticky="w")
 
         self.sort_info = [False for _ in range(self.NUMBER_OF_PLAYER_INFO_COLUMNS)]
+        self.__initialize_menubar()
+
+    def __initialize_menubar(self):
+        self.menu = Menu(self.parent)
+        self.filemenu = Menu(self.menu, tearoff=0)
+        self.filemenu.add_command(label="Export players as excel file", command=self.__export_xlsx)
+        self.filemenu.add_command(label="Export players as .txt file", command=self.__export_txt)
+        self.menu.add_cascade(label="File", menu=self.filemenu)
+        self.team_window.config(menu=self.menu)
 
     def show_team_info_window(self, team_name, season):
         players, self.pages = far.get_players_and_pages_for_team_and_season(team_name, season)
@@ -154,3 +164,31 @@ class TeamInfoGUI:
 
         self.__forget_players()
         self.__show_players(list_of_lists)
+
+    def __export_xlsx(self):
+        filepath = filedialog.asksaveasfilename(filetypes=(
+            ("Excel files", "*.xlsx"),
+        ))
+        data = self.__get_players_as_list_of_lists()
+        utils.export_xlsx(filepath, data)
+
+    def __export_txt(self):
+        filepath = filedialog.asksaveasfilename(filetypes=(
+            ("txt files", "*.txt"),
+        ))
+        data = self.__get_players_as_list_of_lists()
+        utils.export_txt(filepath, data)
+
+    def __get_players_as_list_of_lists(self):
+        data = []
+        list_to_add = []
+        for i in range(len(self.players_data)):
+            if i % TeamInfoGUI.NUMBER_OF_PLAYER_INFO_COLUMNS != 0 or i == 0:
+                list_to_add.append(self.players_data[i]["text"])
+                if i == len(self.players_data) - 1:
+                    data.append(list_to_add)
+            else:
+                data.append(list_to_add)
+                list_to_add = [self.players_data[i]["text"]]
+
+        return data
