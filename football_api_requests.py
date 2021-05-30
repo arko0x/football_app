@@ -127,19 +127,3 @@ def get_players_and_pages_for_team_and_season(team, season, page=None):
                         elem["statistics"][0]["cards"]["red"]))
 
     return players, int(pages)
-
-
-def get_fixtures_for_next_week(league, season):
-    current_date = date.today().strftime("%Y-%m-%d")
-    current_date_plus_seven_days = (date.today() + timedelta(days=7)).strftime("%Y-%m-%d")
-    url = "https://v3.football.api-sports.io/fixtures?from=" + current_date + "&to=" + current_date_plus_seven_days + "&league=" + str(
-        league) + "&season=" + str(season)
-    fixtures = []
-
-    response = requests.request("GET", url, headers=headers, data=payload)
-    data = json.loads(response.text)["response"]
-
-    for elem in data:
-        fixtures.append(None)
-
-    return fixtures
