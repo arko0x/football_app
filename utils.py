@@ -23,7 +23,7 @@ def export_txt(filepath, data):
 
     for i in range(len(data)):
         for j in range(len(data[i])):
-            file.write(data[i][j] + "\t")
+            file.write(str(data[i][j]) + "\t")
         file.write("\n")
 
     file.close()
